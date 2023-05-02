@@ -1,0 +1,20 @@
+{
+    "passengers": [
+        {
+            "id": 1,
+            "name": "Dummy 1",
+            "pickUpPoint": {
+                "lat": 0.00,
+                "lng": 0.00
+            }
+        },
+        {
+            "id": 2,
+            "name": "Dummy 2",
+            "pickUpPoint": {
+                "lat": 0.01,
+                "lng": 0.01
+            }
+        }
+    ]
+}

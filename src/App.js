@@ -1,24 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
+import { RoutingProvider } from './contexts/RoutingContext';
+import { MapView, TableView, RouteDetailView, PassengerForm } from './components';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RoutingProvider>
+      <div className="app">
+        <h1>Passinger Routing App</h1>
+        <PassengerForm />
+        <div className="app-views">
+          <MapView />
+          <TableView />
+          <RouteDetailView />
+        </div>
+      </div>
+    </RoutingProvider>
   );
 }
 
