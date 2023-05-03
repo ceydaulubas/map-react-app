@@ -1,17 +1,16 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useRouting } from '../contexts/RoutingContext';
 import {
     GoogleMap,
     LoadScript,
     Marker,
-    DirectionsService,
     DirectionsRenderer,
 } from '@react-google-maps/api';
 import { fetchPassengerData } from '../api/passengerAPI';
 
 const containerStyle = {
     width: '100%',
-    height: '100%',
+    height: '500px',
 };
 
 const center = {
@@ -82,7 +81,8 @@ const MapView = () => {
     }, []);
 
     return (
-        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+        <LoadScript googleMapsApiKey="AIzaSyCjcz9nsog-wunlvz_l5MQ2nTwv0sHzlNI">
+            {/* <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}> */}
             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10} onLoad={onLoad}>
                 {origin && <Marker position={{ lat: origin.lat, lng: origin.lng }} />}
                 {destination && <Marker position={{ lat: destination.lat, lng: destination.lng }} />}

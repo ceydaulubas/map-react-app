@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
 import { useRouting } from '../contexts/RoutingContext';
+import axios from 'axios';
 
 const PassengerForm = () => {
     const { setPassengers } = useRouting();
     const [name, setName] = useState('');
     const [lat, setLat] = useState('');
     const [lng, setLng] = useState('');
+
+    const API_BASE_URL = 'http://localhost:5000';
+
+    const handleAddPassenger = async (newPassenger) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/passengers`, newPassenger, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log("response.data", response.data);
+        } catch (error) {
+            console.error('Passanger cannot add:', error);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,13 +35,16 @@ const PassengerForm = () => {
         };
 
         setPassengers((prevPassengers) => [...prevPassengers, newPassenger]);
-        console.log("newPassenger", newPassenger)
+        handleAddPassenger(newPassenger);
 
-        // Formu temizleyin
+        // Clear the form
         setName('');
         setLat('');
         setLng('');
+
+        console.log("newPassenger", newPassenger)
     };
+
 
     return (
         <form onSubmit={handleSubmit}>

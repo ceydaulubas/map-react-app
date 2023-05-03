@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { RoutingProvider } from './contexts/RoutingContext';
 import { MapView, TableView, RouteDetailView, PassengerForm } from './components';
