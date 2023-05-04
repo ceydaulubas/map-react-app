@@ -1,5 +1,5 @@
 import MapView from "./MapView";
 import RouteDetailView from "./RouteDetailView";
 import TableView from "./TableView";
-import PassengerForm from "./PassengerForm";
+import PassengerForm from "./PassengerForm/PassengerForm";
 export { MapView, RouteDetailView, TableView, PassengerForm };

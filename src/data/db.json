@@ -27,6 +27,18 @@
         "lng": 6
       },
       "id": 3
+    },
+    {
+      "name": "ceyda",
+      "pickUpPoint": {
+        "lat": 23,
+        "lng": 34
+      },
+      "destination": {
+        "lat": 34,
+        "lng": 56
+      },
+      "id": 4
     }
   ]
 }
