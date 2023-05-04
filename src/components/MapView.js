@@ -7,6 +7,7 @@ import {
     DirectionsRenderer,
 } from '@react-google-maps/api';
 import { fetchPassengerData } from '../api/passengerAPI';
+import RouteDetailView from './RouteDetailView/RouteDetailView';
 
 const containerStyle = {
     width: '100%',
@@ -19,7 +20,7 @@ const center = {
 };
 
 const MapView = () => {
-    const { origin, destination, enrichedPassengers, updatePassengers } = useRouting();
+    const { origin, setOrigin, destination, setDestination, enrichedPassengers, updatePassengers } = useRouting();
     const [directions, setDirections] = React.useState(null);
     const [error, setError] = React.useState(null);
 
@@ -61,6 +62,15 @@ const MapView = () => {
         }
     }, [origin, destination]);
 
+
+    const handleMapClick = (e) => {
+        if (!origin) {
+            setOrigin({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+        } else if (!destination) {
+            setDestination({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+        }
+    };
+
     // Örnek yeni yolcu verisi
     const newPassenger = {
         name: 'John Doe',
@@ -76,33 +86,43 @@ const MapView = () => {
         updatePassengers(newPassengers);
     };
 
+
+
     const onLoad = React.useCallback((map) => {
         mapRef.current = map;
     }, []);
 
-    console.log("enrichedPassengers", enrichedPassengers)
+    // console.log("enrichedPassengers", enrichedPassengers)
     return (
-        <LoadScript googleMapsApiKey="AIzaSyCjcz9nsog-wunlvz_l5MQ2nTwv0sHzlNI">
-            {/* <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}> */}
-            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10} onLoad={onLoad}>
-                {origin && <Marker position={{ lat: origin.lat, lng: origin.lng }} />}
-                {destination && <Marker position={{ lat: destination.lat, lng: destination.lng }} />}
-                {enrichedPassengers.map((passenger, index) => (
-                    <Marker
-                        key={index}
-                        position={{
-                            lat: passenger.pickUpPoint.lat,
-                            lng: passenger.pickUpPoint.lng,
-                        }}
-                    />
-                ))}
-                {directions && <DirectionsRenderer directions={directions} />}
-                {/* Yeni yolcu ekleme işlemini tetiklemek için bir düğme ekleyebilirsiniz */}
-                <button onClick={addNewPassenger}>
-                </button>
+        <div>
+            <RouteDetailView />
+            <LoadScript googleMapsApiKey="AIzaSyCjcz9nsog-wunlvz_l5MQ2nTwv0sHzlNI">
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={10}
+                    onLoad={onLoad}
+                    onClick={handleMapClick}
+                >
+                    {origin && <Marker position={{ lat: origin.lat, lng: origin.lng }} />}
+                    {destination && <Marker position={{ lat: destination.lat, lng: destination.lng }} />}
+                    {enrichedPassengers.map((passenger, index) => (
+                        <Marker
+                            key={index}
+                            position={{
+                                lat: passenger.pickUpPoint.lat,
+                                lng: passenger.pickUpPoint.lng,
+                            }}
+                        />
+                    ))}
+                    {directions && <DirectionsRenderer directions={directions} />}
+                    {/* Yeni yolcu ekleme işlemini tetiklemek için bir düğme ekleyebilirsiniz */}
+                    <button onClick={addNewPassenger}>
+                    </button>
+                </GoogleMap>
+            </LoadScript>
+        </div>
 
-            </GoogleMap>
-        </LoadScript>
     );
 };
 

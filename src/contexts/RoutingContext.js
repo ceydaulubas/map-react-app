@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { enrichPassengerData } from '../utils/enrichPassengerData';
+import { fetchPassengerData } from '../api/passengerAPI';
 
 const RoutingContext = createContext();
 
@@ -25,16 +26,32 @@ export const RoutingProvider = ({ children }) => {
         });
     };
 
-    useEffect(() => {
-        if (passengers.length > 0 && origin && destination) {
-            const enrichedData = enrichPassengerData(passengers, origin, destination);
-            setEnrichedPassengers(enrichedData);
-        }
-    }, [passengers, origin, destination]);
-
     const updatePassengers = (newPassengers) => {
         setPassengers(newPassengers);
     };
+
+    useEffect(() => {
+        const fetchPassengers = async () => {
+            const response = await fetchPassengerData();
+            setPassengers(response);
+        };
+
+        fetchPassengers();
+    }, []);
+
+    useEffect(() => {
+        console.log("passengers.length ", passengers.length)
+        console.log("origin", origin)
+        console.log("destination", destination)
+        if (passengers.length > 0 && origin && destination) {
+            (async () => {
+                const enrichedData = await enrichPassengerData(passengers, origin, destination);
+                console.log("enrichedData", enrichedData);
+                setEnrichedPassengers(enrichedData);
+            })();
+        }
+    }, [passengers, origin, destination]);
+
 
 
     const value = {
