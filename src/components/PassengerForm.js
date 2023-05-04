@@ -1,3 +1,4 @@
+// PassengerForm.js
 import React, { useState } from 'react';
 import { useRouting } from '../contexts/RoutingContext';
 import axios from 'axios';
@@ -7,23 +8,12 @@ const PassengerForm = () => {
     const [name, setName] = useState('');
     const [lat, setLat] = useState('');
     const [lng, setLng] = useState('');
+    const [destinationLat, setDestinationLat] = useState('');
+    const [destinationLng, setDestinationLng] = useState('');
 
     const API_BASE_URL = 'http://localhost:5000';
 
-    const handleAddPassenger = async (newPassenger) => {
-        try {
-            const response = await axios.post(`${API_BASE_URL}/passengers`, newPassenger, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            console.log("response.data", response.data);
-        } catch (error) {
-            console.error('Passanger cannot add:', error);
-        }
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const newPassenger = {
@@ -32,36 +22,68 @@ const PassengerForm = () => {
                 lat: parseFloat(lat),
                 lng: parseFloat(lng),
             },
+            destination: {
+                lat: parseFloat(destinationLat),
+                lng: parseFloat(destinationLng),
+            },
         };
 
-        setPassengers((prevPassengers) => [...prevPassengers, newPassenger]);
-        handleAddPassenger(newPassenger);
+        try {
+            const response = await axios.post(`${API_BASE_URL}/passengers`, newPassenger);
+            setPassengers((prevPassengers) => [...prevPassengers, response.data]);
 
-        // Clear the form
-        setName('');
-        setLat('');
-        setLng('');
-
-        console.log("newPassenger", newPassenger)
+            console.log("newPassenger", newPassenger)
+            // Clear the form
+            setName('');
+            setLat('');
+            setLng('');
+            setDestinationLat('');
+            setDestinationLng('');
+        } catch (error) {
+            console.error('Error adding new passenger:', error);
+        }
     };
 
-
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Name:
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </label>
-            <label>
-                Lat:
-                <input type="text" value={lat} onChange={(e) => setLat(e.target.value)} />
-            </label>
-            <label>
-                Long:
-                <input type="text" value={lng} onChange={(e) => setLng(e.target.value)} />
-            </label>
-            <button type="submit">Add Passenger</button>
-        </form>
+        <div>
+            <form onSubmit={handleSubmit}>
+                {/* Passenger name input */}
+                <label>
+                    Name:
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                </label>
+
+                {/* Passenger location inputs */}
+                <label>
+                    Lat:
+                    <input type="text" value={lat} onChange={(e) => setLat(e.target.value)} />
+                </label>
+                <label>
+                    Long:
+                    <input type="text" value={lng} onChange={(e) => setLng(e.target.value)} />
+                </label>
+
+                {/* Destination location inputs */}
+                <label>
+                    Destination Lat:
+                    <input
+                        type="text"
+                        value={destinationLat}
+                        onChange={(e) => setDestinationLat(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Destination Long:
+                    <input
+                        type="text"
+                        value={destinationLng}
+                        onChange={(e) => setDestinationLng(e.target.value)}
+                    />
+                </label>
+
+                <button type="submit">Add Passenger</button>
+            </form>
+        </div>
     );
 };
 

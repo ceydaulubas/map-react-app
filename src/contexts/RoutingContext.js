@@ -12,10 +12,22 @@ export const RoutingProvider = ({ children }) => {
     const [destination, setDestination] = useState(null);
     const [passengers, setPassengers] = useState([]);
     const [enrichedPassengers, setEnrichedPassengers] = useState([]);
+    const [routeInfo, setRouteInfo] = useState(null);
+
+    const saveRouteInfo = (directionsResult) => {
+        const route = directionsResult.routes[0].legs[0];
+        const distance = route.distance.value / 1000;
+        const duration = route.duration.value / 3600;
+
+        setRouteInfo({
+            distance,
+            duration,
+        });
+    };
 
     useEffect(() => {
         if (passengers.length > 0 && origin && destination) {
-            const enrichedData = enrichPassengerData(passengers, { origin, destination });
+            const enrichedData = enrichPassengerData(passengers, origin, destination);
             setEnrichedPassengers(enrichedData);
         }
     }, [passengers, origin, destination]);
@@ -34,6 +46,8 @@ export const RoutingProvider = ({ children }) => {
         setPassengers,
         enrichedPassengers,
         updatePassengers,
+        routeInfo,
+        saveRouteInfo,
     };
 
     return <RoutingContext.Provider value={value}>{children}</RoutingContext.Provider>;

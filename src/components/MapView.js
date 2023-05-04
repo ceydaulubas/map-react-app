@@ -14,8 +14,8 @@ const containerStyle = {
 };
 
 const center = {
-    lat: 0,
-    lng: 0,
+    lat: 41.0082,
+    lng: 28.9784,
 };
 
 const MapView = () => {
@@ -80,6 +80,7 @@ const MapView = () => {
         mapRef.current = map;
     }, []);
 
+    console.log("enrichedPassengers", enrichedPassengers)
     return (
         <LoadScript googleMapsApiKey="AIzaSyCjcz9nsog-wunlvz_l5MQ2nTwv0sHzlNI">
             {/* <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}> */}
